@@ -5,6 +5,7 @@ from datetime import datetime
 import numpy as np
 from typing import Optional, Dict
 import json
+import os
 
 # Add these function definitions here
 def check_data_quality(df: pd.DataFrame) -> None:
@@ -99,8 +100,13 @@ def validate_excel_structure(df: pd.DataFrame) -> tuple[bool, str]:
 @st.cache_data(ttl=3600)
 def load_data() -> Optional[pd.DataFrame]:
     try:
+        # Get the directory containing the script
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # Construct path to Excel file
+        file_path = os.path.join(script_dir, "27_Month_rolling.xlsx")
+        
         with st.spinner("Loading and validating data..."):
-            excel_file = pd.ExcelFile("27_Month_rolling.xlsx")
+            excel_file = pd.ExcelFile(file_path)
             df = excel_file.parse("Rolling Periods 27 Month")
             
             # Validate data structure
